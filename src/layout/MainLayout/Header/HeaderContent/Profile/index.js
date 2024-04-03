@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
+import Web3 from 'web3';
 
 // material-ui
 import {
@@ -32,11 +33,29 @@ const Profile = () => {
 
 
   const anchorRef = useRef(null);
-  const [open, setOpen] = useState(false);
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+  // const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  console.log(message)
+  // const handleToggle = () => {
+  //   setOpen((prevOpen) => !prevOpen);
+  // };
+  const connectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        // Request account access
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const web3 = new Web3(window.ethereum);
+        const accounts = await web3.eth.getAccounts();
+        const address = accounts[0];
+        setMessage(`Wallet connected. Address: ${address}`);
+      } catch (error) {
+        setMessage('Error connecting to wallet.');
+        console.error('Error connecting to wallet:', error);
+      }
+    } else {
+      setMessage('MetaMask not detected. Please install MetaMask extension.');
+    }
   };
-
 
   const iconBackColorOpen = 'grey.300';
 
@@ -55,10 +74,10 @@ const Profile = () => {
         ref={anchorRef}
         aria-controls={open ? 'profile-grow' : undefined}
         aria-haspopup="true"
-        onClick={handleToggle}
+        onClick={connectWallet}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-          <Typography variant="subtitle1">Start Trading</Typography>
+          <Typography variant="subtitle1">MetaMask Wallet </Typography>
         </Stack>
       </ButtonBase>
     </Box>
