@@ -48,6 +48,7 @@ const Profile = () => {
         const accounts = await web3.eth.getAccounts();
         const address = accounts[0];
         setMessage(`Wallet connected. Address: ${address}`);
+        alert(`Wallet connected. Address: ${address}`)
       } catch (error) {
         setMessage('Error connecting to wallet.');
         console.error('Error connecting to wallet:', error);
